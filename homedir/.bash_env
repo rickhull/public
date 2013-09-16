@@ -1,2 +1,6 @@
 export VISUAL=emacs
 export EDITOR=emacs
+
+USER_INSTALL_GEM_BIN=~/.gem/ruby/1.9.1/bin
+
+[ -r "$USER_INSTALL_GEM_BIN" ] && export PATH="$PATH:$USER_INSTALL_GEM_BIN"
