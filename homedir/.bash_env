@@ -8,3 +8,7 @@ USER_INSTALL_GEM_BIN=~/.gem/ruby/1.9.1/bin
 . ~/.git_completion
 
 export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
+
+findsed() {
+  find ./ -type f -exec sed -i "$1" {} \;
+}
