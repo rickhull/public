@@ -2,12 +2,16 @@ export VISUAL=emacs
 export EDITOR=emacs
 
 USER_INSTALL_GEM_BIN=~/.gem/ruby/1.9.1/bin
-
+[ -r "$USER_INSTALL_GEM_BIN" ] && export PATH="$PATH:$USER_INSTALL_GEM_BIN"
+USER_INSTALL_GEM_BIN=~/.gem/ruby/2.0.0/bin
 [ -r "$USER_INSTALL_GEM_BIN" ] && export PATH="$PATH:$USER_INSTALL_GEM_BIN"
 
-. ~/.git_completion
-
-export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
+if [ -e ~/.git_completion ]; then
+  . ~/.git_completion
+  export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
+else
+  echo "no ~/.git_completion found!"
+fi
 
 findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
