@@ -1,0 +1,5 @@
+(defun emacs-global-indent ()
+   "Indent the entire buffer."
+   (indent-region (point-min) (point-max) nil)
+   (save-buffer)
+)

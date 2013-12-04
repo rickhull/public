@@ -17,7 +17,7 @@ do
       exit 1
    fi
    echo "Indenting $1 with emacs in batch mode"
-   emacs -batch $1 -l ~/emacs-format-file -f emacs-format-function
+   emacs -batch $1 -l ~/emacs-global-indent-file -f emacs-global-indent
    echo
    shift
 done
