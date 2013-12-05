@@ -23,5 +23,6 @@
   (setq sh-basic-offset 2
         sh-indentation 2)
   (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max))
   (save-buffer)
 )
