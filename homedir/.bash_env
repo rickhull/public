@@ -16,3 +16,5 @@ fi
 findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
 }
+
+alias gerrit='ssh pd -- gerrit $@'
