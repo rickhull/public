@@ -5,8 +5,7 @@ export EDITOR=emacs
 
 # gem install --user-install
 #
-for GEM_BIN in ~/.gem/ruby/1.9.1/bin ~/.gem/ruby/2.0.0/bin; do
-  mkdir -p $GEM_BIN
+for GEM_BIN in ~/.gem/ruby/*/bin; do
   export PATH="$PATH:$GEM_BIN"
 done
 
