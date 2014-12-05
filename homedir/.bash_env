@@ -12,7 +12,7 @@ done
 # git branch in bash prompt
 #
 if [ -e ~/.git_completion ]; then
-  . ~/.git_completion
+  source ~/.git_completion
   export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
 else
   echo "no ~/.git_completion found!"
