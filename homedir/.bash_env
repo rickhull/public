@@ -25,12 +25,3 @@ findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
 }
 
-# cloudscaling
-#
-alias gerrit='ssh pd -- gerrit $@'
-
-# keychain
-#
-keychain ~/.ssh/id_rsa
-. ~/.keychain/$HOSTNAME-sh
-. ~/.keychain/$HOSTNAME-sh-gpg
