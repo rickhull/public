@@ -27,5 +27,5 @@
   (save-buffer)
 )
 
-# for elixir-mode
+;; for elixir-mode
 (setq package-archives '(("melpa" . "http://stable.melpa.org/packages/")))
