@@ -3,12 +3,6 @@
 export VISUAL=emacs
 export EDITOR=emacs
 
-# gem install --user-install
-#
-for GEM_BIN in ~/.gem/ruby/*/bin; do
-  export PATH="$PATH:$GEM_BIN"
-done
-
 # git branch in bash prompt
 #
 if [ -e ~/.git_completion ]; then
@@ -18,9 +12,24 @@ else
   echo "no ~/.git_completion found!"
 fi
 
-# handy
+# handy for e.g. recursive global search / replace
+# findsed s/foo/bar/g
 #
 findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
 }
 
+# chruby
+if [ -f /usr/local/share/chruby/chruby.sh ]; then
+   source /usr/local/share/chruby/chruby.sh
+else
+   # provide for gem install --user-install
+   #
+   for GEM_BIN in $HOME/.gem/ruby/*/bin; do
+      export PATH="$PATH:$GEM_BIN"
+   done
+fi
+
+if [ -d $HOME/src/elixir/bin ]; then
+   export PATH="$PATH:$HOME/src/elixir/bin"
+fi
