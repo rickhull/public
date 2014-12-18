@@ -26,3 +26,6 @@
   (untabify (point-min) (point-max))
   (save-buffer)
 )
+
+# for elixir-mode
+(setq package-archives '(("melpa" . "http://stable.melpa.org/packages/")))
