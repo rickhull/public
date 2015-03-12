@@ -5,18 +5,18 @@ export EDITOR=emacs
 
 # git branch in bash prompt
 #
-# 1. find git's bash_completion script
-# 2. source it
-# 3. export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
+source /etc/bash_completion
+export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
 
-# handy for e.g. recursive global search / replace
+# handy for recursive global search / replace
 # findsed s/foo/bar/g
 #
 findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
 }
 
-# chruby
+# ruby - use chruby if available; setup PATH for user-install gems otherwise
+#
 if [ -f /usr/local/share/chruby/chruby.sh ]; then
    source /usr/local/share/chruby/chruby.sh
 else
@@ -27,7 +27,8 @@ else
    done
 fi
 
-# use locally built elixir binary if available
+# elixir - use locally built binary if available
+#
 if [ -d $HOME/src/elixir/bin ]; then
    export PATH="$PATH:$HOME/src/elixir/bin"
 fi
