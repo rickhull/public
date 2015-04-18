@@ -1,12 +1,12 @@
 if [ -d ~/.ssh ]; then
 
     function run_agent {
-	pkill ssh-agent -e $EUID
+	pkill ssh-agent -u $EUID
 	ssh-agent > ~/.ssh/agent
 	chmod 600 ~/.ssh/agent
 	echo "ssh-add your keys"
     }
-    
+
 
     # do I already have an ssh-agent running?
     # if so, does its PID match ~/.ssh/agent?
