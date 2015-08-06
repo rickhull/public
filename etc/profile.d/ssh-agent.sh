@@ -35,11 +35,8 @@ if [ -d "$SSH_DIR" ] && [ "$USERID" -gt 999 ]; then
 	. $AGENT_FILE
     fi
 
-    unset AGENT_FILE
-    unset PGREP_FLAGS
-    unset ERROR
+    unset AGENT_FILE PGREP_FLAGS ERROR agent_pid run_agent
     ssh-add -l # list keys
 fi
 
-unset SSH_DIR
-unset USERID
+unset SSH_DIR USERID
