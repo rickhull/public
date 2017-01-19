@@ -36,3 +36,6 @@ tint2 -c ~/.config/tint2/launcher \
 # taskbar / systray
 tint2 -c ~/.config/tint2/taskbar \
       >> $log 2>&1 &
+
+# volume control
+pnmixer &
