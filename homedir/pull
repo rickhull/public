@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "please provide a dir"
+  exit 1
+else
+  dir=$1
+  if [ ! -d $dir ]; then
+    echo cannot find $dir
+    exit 1
+  fi
+  if [ ! -d $HOME/$dir ]; then
+    echo "cannot find $HOME/$dir"
+    exit 1
+  fi
+fi
+
+for entry in $dir/*; do
+  echo "found $entry"
+  if [ -f $entry ]; then
+    if [ -f $HOME/$entry ]; then
+      cp $HOME/$entry $entry
+      echo "copied $HOME/$entry"
+    else
+      echo $entry is a file but $HOME/$entry is not
+    fi
+  elif [ -d $entry ]; then
+    if [ -d $HOME/$entry ]; then
+      # copy its file contents (no dir recursion)
+      echo "pulling $HOME/$entry dir..."
+      for file in $HOME/$entry/*; do
+        if [ -f $file ]; then
+          echo "copied $file"
+          cp $file $entry/$(basename $file)
+        fi
+      done
+    else
+      echo "$entry is a dir but $HOME/$entry is not"
+    fi
+  else
+    echo $entry is neither directory nor file
+  fi
+done

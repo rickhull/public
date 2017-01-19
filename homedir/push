@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# never overwrite: just note which which files would be overwritten and some
+# details like which is newer
+
+checkdir() {
+  if [ -d $HOME/$1 ]; then
+    echo $HOME/$1 exists
+  else
+    echo "$HOME/$1 does not exist; creating..."
+    mkdir -p $HOME/$1
+  fi
+}
+
+checkfile() {
+  if [ -f $HOME/$1 ]; then
+    echo $HOME/$1 exists
+  else
+    echo "$HOME/$1 does not exist; copying..."
+    cp $1 $HOME/$1
+  fi
+}
+
+if [ -z "$1" ]; then
+   echo "please provide a dir"
+   exit 1
+else
+   dir=$1
+   if [ ! -d $dir ]; then
+      echo "cannot find $dir"
+      exit 1
+   fi
+fi
+
+checkdir $dir
+
+for entry in $dir/*; do
+  if [ -d $entry ]; then
+    checkdir $entry
+    for file in $entry/*; do
+      if [ -f $file ]; then
+        checkfile $file
+      else
+        echo found $file but not a file
+      fi
+    done
+  else
+    if [ -f $entry ]; then
+      checkfile $entry
+    else
+      echo found $entry but not a file or dir
+    fi
+  fi
+done
