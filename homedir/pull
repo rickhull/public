@@ -1,12 +1,29 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
+# this only works when run from /path/to/public/homedir
+# it accepts a relative directory, e.g. pull .config
+# (for /path/to/public/homedir/.config)
+# it will look for $HOME/.config, check its contents, copy any files found
+# then go one level deep into subdirectories and copy any files found
+#
+# new feature: --add or --update
+
+mode=$1
+dir=$2
+
+if [ -z "$mode" ]; then
+  echo "please provide a mode: add or update"
+  exit 1
+elif [[ $mode != add && $mode != update ]]; then
+  echo "$mode is not a valid mode; use add or update"
+fi
+
+if [ -z "$dir" ]; then
   echo "please provide a dir"
   exit 1
 else
-  dir=$1
   if [ ! -d $dir ]; then
-    echo cannot find $dir
+    echo "cannot find $dir"
     exit 1
   fi
   if [ ! -d $HOME/$dir ]; then
@@ -15,29 +32,34 @@ else
   fi
 fi
 
-for entry in $dir/*; do
-  echo "found $entry"
-  if [ -f $entry ]; then
-    if [ -f $HOME/$entry ]; then
-      cp $HOME/$entry $entry
-      echo "copied $HOME/$entry"
-    else
-      echo $entry is a file but $HOME/$entry is not
-    fi
-  elif [ -d $entry ]; then
-    if [ -d $HOME/$entry ]; then
-      # copy its file contents (no dir recursion)
-      echo "pulling $HOME/$entry dir..."
-      for file in $HOME/$entry/*; do
-        if [ -f $file ]; then
-          echo "copied $file"
-          cp $file $entry/$(basename $file)
-        fi
-      done
-    else
-      echo "$entry is a dir but $HOME/$entry is not"
-    fi
+copy_home_file() {
+  if [ -f $HOME/$1 ]; then
+    cp $HOME/$1 $1
   else
-    echo $entry is neither directory nor file
+    echo "$HOME/$1 is not a file"
+    return 1
   fi
-done
+}
+
+echo "good so far"
+
+if [ $mode == update ]; then
+  # only pull in stuff that already exists
+  for entry in $dir/*; do
+    echo "found $entry"
+    if [ -f $entry ]; then
+      copy_home_file $entry && echo "copied $HOME/$entry"
+    elif [ -d $entry ]; then
+      if [ -d $HOME/$entry ]; then
+        # update existing files
+        for file in $entry/*; do
+          test -f $file && copy_home_file $file && echo "copied $HOME/$file"
+        done
+      else
+        echo "$entry is a dir but $HOME/$entry is not"
+      fi
+    else
+      echo "$entry is neither directory nor file"
+    fi
+  done
+fi
