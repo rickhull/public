@@ -1,0 +1,69 @@
+# ------------------------------------
+# Backgrounds
+# We'll define several of these and reference them later
+# IDs are autoassigned starting at 1
+#
+
+# Background 1: Panel
+rounded = 0
+border_width = 0
+background_color = #000000 20
+
+# Background 2: Tooltip
+rounded = 0
+border_width = 0
+background_color = #000000 75
+
+#-------------------------------------
+# Panel
+#
+panel_items = L
+panel_size = 300 40
+panel_margin = 0 0
+panel_padding = 2 0 2
+panel_background_id = 1
+wm_menu = 1
+panel_dock = 0
+panel_position = bottom center horizontal
+panel_layer = top
+panel_monitor = all
+primary_monitor_first = 0
+autohide = 1
+autohide_show_timeout = 0.2
+autohide_hide_timeout = 1
+autohide_height = 2
+strut_policy = minimum
+panel_window_name = os_x_dock
+disable_transparency = 0
+mouse_effects = 1
+font_shadow = 0
+mouse_hover_icon_asb = 100 0 10
+mouse_pressed_icon_asb = 100 0 -10
+
+#-------------------------------------
+# Launcher
+# launcher_apps_dir = /usr/share/applications
+launcher_padding = 16 4 8
+launcher_background_id = 0
+launcher_icon_background_id = 0
+launcher_icon_size = 32
+launcher_icon_asb = 100 0 0
+launcher_icon_theme_override = 0
+startup_notifications = 1
+launcher_tooltip = 1
+launcher_item_app = lxterminal.desktop
+launcher_item_app = chromium.desktop
+launcher_item_app = firefox-esr.desktop
+launcher_item_app = gimp.desktop
+launcher_item_app = steam.desktop
+launcher_item_app = wesnoth-1.12.desktop
+launcher_item_app = freeciv-gtk2.desktop
+
+
+#-------------------------------------
+# Tooltip
+tooltip_show_timeout = 0.5
+tooltip_hide_timeout = 0.1
+tooltip_padding = 2 2
+tooltip_background_id = 2
+tooltip_font_color = #AACCDD 100

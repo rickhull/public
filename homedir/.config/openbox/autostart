@@ -1,0 +1,38 @@
+# turn bell off
+xset -b
+
+log=~/autostart.log
+
+# compositor
+compton --daemon --config ~/.config/compton/tooltip.conf \
+        --shadow --no-dock-shadow --no-dnd-shadow \
+        --fading --fade-delta 5 \
+        > $log 2>&1
+
+# main status
+conky --daemonize --config ~/.config/conky/main.conf \
+      --alignment top_left \
+      >> $log 2>&1
+
+# top processes
+conky --daemonize --config ~/.config/conky/top.conf \
+      --alignment bottom_left --interval 2 \
+      >> $log 2>&1
+
+# tail syslog
+conky --daemonize --config ~/.config/conky/syslog.conf \
+      --alignment bottom_right \
+      >> $log 2>&1
+
+# IO (network and disk)
+conky --daemonize --config ~/.config/conky/io.conf \
+      --alignment top_right \
+      >> $log 2>&1
+
+# app launcher
+tint2 -c ~/.config/tint2/launcher \
+      >> $log 2>&1 &
+
+# taskbar / systray
+tint2 -c ~/.config/tint2/taskbar \
+      >> $log 2>&1 &
