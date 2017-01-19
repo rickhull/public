@@ -60,4 +60,11 @@ if [[ $mode == update ]]; then
       echo "$entry is neither directory nor file"
     fi
   done
+elif [[ $mode == add ]]; then
+  echo "cp -R $HOME/$dir $dir/"
+  cp -R $HOME/$dir $dir/
+  echo "DONE"
+else
+  echo "unsupported mode: $mode"
+  exit 1
 fi
