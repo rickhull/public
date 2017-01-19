@@ -3,6 +3,10 @@
 # never overwrite: just note which which files would be overwritten and some
 # details like which is newer
 
+# TODO: add/update
+# add will never overwrite
+# update will overwrite
+
 checkdir() {
   if [ -d $HOME/$1 ]; then
     echo $HOME/$1 exists
