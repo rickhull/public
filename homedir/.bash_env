@@ -17,6 +17,13 @@ findsed() {
 
 alias lst='ls -ahlt | head'
 
+listening() {
+  sudo lsof -nP -i4TCP -sTCP:LISTEN | grep '*'
+}
+
+# reminder for wifi
+# nmcli dev wifi
+
 topdu() {
   if ! shopt -q dotglob; then
     shopt -s dotglob
@@ -25,6 +32,11 @@ topdu() {
   else
     du -s * 2>/dev/null | sort -rn | head
   fi
+}
+
+top_count() {
+  num=${1:-9}
+  sort | uniq -c | sort -rn | head -n$num
 }
 
 # chruby
