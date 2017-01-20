@@ -11,7 +11,7 @@ compton --daemon --config ~/.config/compton/tooltip.conf \
 
 # main status
 conky --daemonize --config ~/.config/conky/main.conf \
-      --alignment top_left \
+      --alignment top_left --interval 2 \
       >> $log 2>&1
 
 # top processes
@@ -26,7 +26,7 @@ conky --daemonize --config ~/.config/conky/syslog.conf \
 
 # IO (network and disk)
 conky --daemonize --config ~/.config/conky/io.conf \
-      --alignment top_right \
+      --alignment top_right --interval 2 \
       >> $log 2>&1
 
 # app launcher
