@@ -42,7 +42,6 @@ mouse_pressed_icon_asb = 100 0 -10
 
 #-------------------------------------
 # Launcher
-# launcher_apps_dir = /usr/share/applications
 launcher_padding = 16 4 8
 launcher_background_id = 0
 launcher_icon_background_id = 0
@@ -51,13 +50,13 @@ launcher_icon_asb = 100 0 0
 launcher_icon_theme_override = 0
 startup_notifications = 1
 launcher_tooltip = 1
-launcher_item_app = lxterminal.desktop
-launcher_item_app = chromium.desktop
-launcher_item_app = firefox-esr.desktop
-launcher_item_app = gimp.desktop
-launcher_item_app = steam.desktop
-launcher_item_app = wesnoth-1.12.desktop
-launcher_item_app = freeciv-gtk2.desktop
+launcher_item_app = /usr/share/applications/lxterminal.desktop
+launcher_item_app = /usr/share/applications/chromium.desktop
+launcher_item_app = /usr/share/applications/firefox-esr.desktop
+launcher_item_app = /usr/share/applications/gimp.desktop
+launcher_item_app = /usr/share/applications/steam.desktop
+launcher_item_app = /usr/share/applications/wesnoth-1.12.desktop
+launcher_item_app = /usr/share/applications/freeciv-gtk2.desktop
 
 
 #-------------------------------------
