@@ -37,5 +37,8 @@ tint2 -c ~/.config/tint2/launcher \
 tint2 -c ~/.config/tint2/taskbar \
       >> $log 2>&1 &
 
-# volume control
+# volume control (systray)
 pnmixer &
+
+# network manager (systray)
+nm-applet &
