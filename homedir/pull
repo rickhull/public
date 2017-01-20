@@ -9,11 +9,13 @@ mode=$2
 
 test -z $dir && echo "please provide a dir" && exit 1
 
-# mode=update means that we will only consider what already exists in the repo
-# We will never add files to the repo in this mode.
-# mode=add means that we will add everything from $HOME/$dir to the repo; this
-# is useful sometimes but not often; often the host system has way more junk
-# than we want in the repo
+# mode=update
+#   * only consider what already exists in the repo
+#   * never add files to the repo
+# mode=add
+#   * add everything from $HOME/$dir to the repo
+#   * sometimes useful but not often
+#   * host system typically has way more junk than desired in the repo
 case $mode in
   add|update)
     true
@@ -27,7 +29,7 @@ case $mode in
     ;;
 esac
 
-# we've already validated that $1 is a file and we want to overwrite it
+# assume $1 is a file and goal is to overwrite it
 # e.g. CWD=~/src/public/homedir $1=.config/tint2/launcher
 copy_home_file() {
   if [[ ! -f $HOME/$1 ]]; then echo "$HOME/$1 is not a file" && return 1; fi
