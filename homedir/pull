@@ -60,10 +60,10 @@ if [[ $mode == update ]]; then
       if [[ -d $HOME/$entry ]]; then
         for file in $entry/*; do test -f $file && copy_home_file $file; done
       else
-        echo "$HOME/$entry is not a dir"
+        echo "ERROR: $HOME/$entry is not a dir" 1>&2
       fi
     else
-      echo "$entry is neither directory nor file"
+      echo "ERROR: $entry is neither directory nor file" 1>&2
     fi
   done
 elif [[ $mode == add ]]; then
