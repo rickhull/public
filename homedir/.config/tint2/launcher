@@ -18,7 +18,7 @@ background_color = #000000 75
 # Panel
 #
 panel_items = L
-panel_size = 300 40
+panel_size = 350 40
 panel_margin = 0 0
 panel_padding = 2 0 2
 panel_background_id = 1
@@ -52,6 +52,7 @@ startup_notifications = 1
 launcher_tooltip = 1
 launcher_item_app = /usr/share/applications/lxterminal.desktop
 launcher_item_app = /usr/share/applications/chromium.desktop
+launcher_item_app = /usr/share/applications/synaptic.desktop
 launcher_item_app = /usr/share/applications/firefox-esr.desktop
 launcher_item_app = /usr/share/applications/gimp.desktop
 launcher_item_app = /usr/share/applications/steam.desktop
