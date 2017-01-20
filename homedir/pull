@@ -1,29 +1,52 @@
 #!/bin/bash
 
+#
+# basic arg validation
+#
+
 dir=$1
 mode=$2
 
+test -z $dir && echo "please provide a dir" && exit 1
+
+# mode=update means that we will only consider what already exists in the repo
+# We will never add files to the repo in this mode.
+# mode=add means that we will add everything from $HOME/$dir to the repo; this
+# is useful sometimes but not often; often the host system has way more junk
+# than we want in the repo
+case $mode in
+  add|update)
+    true
+    ;;
+  "")
+    mode=update
+    ;;
+  *)
+    echo "mode=$mode invalid; use add or update"
+    exit 1
+    ;;
+esac
+
+# we've already validated that $1 is a file and we want to overwrite it
+# e.g. CWD=~/src/public/homedir $1=.config/tint2/launcher
 copy_home_file() {
   if [[ ! -f $HOME/$1 ]]; then echo "$HOME/$1 is not a file" && return 1; fi
   echo "copying $HOME/$1"
   cp $HOME/$1 $1
 }
 
-test -z $dir && echo "please provide a dir" && exit 1
+#
+# extended $dir validation
+#
+
 if [[ ! -d $dir ]]; then
   test -f $dir && copy_home_file $dir && exit 0
   echo "cannot find $dir or a problem with $HOME/$dir" && exit 1
 elif [[ ! -d $HOME/$dir ]]; then echo "$HOME/$dir is not a dir" && exit 1; fi
 
-# mode=update means that we will only consider what's in the repo; we will
-# never add files to the repo in this mode
-# mode=add means that we will add everything from $HOME/$dir to the repo; this
-# is useful sometimes but not often; often the host system has way more junk
-# than we want in the repo
-if [[ -z "$mode" ]]; then mode=update; fi
-if [[ $mode != add && $mode != update ]]; then
-  echo "$mode is not a valid mode; use add or update"
-fi
+#
+# perform the pull
+#
 
 if [[ $mode == update ]]; then
   # only pull in stuff that already exists
