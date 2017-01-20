@@ -1,22 +1,7 @@
 #!/bin/bash
 
-# this only works when run from /path/to/public/homedir
-# it accepts a relative directory, e.g. pull .config
-# (for /path/to/public/homedir/.config)
-# it will look for $HOME/.config, check its contents, copy any files found
-# then go one level deep into subdirectories and copy any files found
-#
-# new feature: --add or --update
-
-mode=$1
-dir=$2
-
-if [[ -z "$mode" ]]; then
-  echo "please provide a mode: add or update"
-  exit 1
-elif [[ $mode != add && $mode != update ]]; then
-  echo "$mode is not a valid mode; use add or update"
-fi
+dir=$1
+mode=$2
 
 if [[ -z "$dir" ]]; then
   echo "please provide a dir"
@@ -30,6 +15,16 @@ else
     echo "cannot find $HOME/$dir"
     exit 1
   fi
+fi
+
+# mode=update means that we will only consider what's in the repo; we will
+# never add files to the repo in this mode
+# mode=add means that we will add everything from $HOME/$dir to the repo; this
+# is useful sometimes but not often; often the host system has way more junk
+# than we want in the repo
+if [[ -z "$mode" ]]; then mode=update; fi
+if [[ $mode != add && $mode != update ]]; then
+  echo "$mode is not a valid mode; use add or update"
 fi
 
 copy_home_file() {
@@ -64,7 +59,4 @@ elif [[ $mode == add ]]; then
   echo "cp -R $HOME/$dir $dir/"
   cp -R $HOME/$dir $dir/
   echo "DONE"
-else
-  echo "unsupported mode: $mode"
-  exit 1
 fi
