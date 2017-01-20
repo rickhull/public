@@ -4,33 +4,16 @@ dir=$1
 mode=$2
 
 copy_home_file() {
-  if [[ -f $HOME/$1 ]]; then
-    cp $HOME/$1 $1
-    echo "copied $HOME/$1"
-  else
-    echo "$HOME/$1 is not a file"
-    return 1
-  fi
+  if [[ ! -f $HOME/$1 ]]; then echo "$HOME/$1 is not a file" && return 1; fi
+  echo "copying $HOME/$1"
+  cp $HOME/$1 $1
 }
 
-if [[ -z "$dir" ]]; then
-  echo "please provide a dir"
-  exit 1
-else
-  if [[ ! -d $dir ]]; then
-    if test -f $dir && copy_home_file $dir; then
-      # user specified only a single file, and so we copied it; now exit
-      exit 0
-    else
-      echo "cannot find $dir or a problem with $HOME/$dir"
-      exit 1
-    fi
-  fi
-  if [[ ! -d $HOME/$dir ]]; then
-    echo "cannot find $HOME/$dir"
-    exit 1
-  fi
-fi
+test -z $dir && echo "please provide a dir" && exit 1
+if [[ ! -d $dir ]]; then
+  test -f $dir && copy_home_file $dir && exit 0
+  echo "cannot find $dir or a problem with $HOME/$dir" && exit 1
+elif [[ ! -d $HOME/$dir ]]; then echo "$HOME/$dir is not a dir" && exit 1; fi
 
 # mode=update means that we will only consider what's in the repo; we will
 # never add files to the repo in this mode
