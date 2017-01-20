@@ -24,13 +24,14 @@ listening() {
 # reminder for wifi
 # nmcli dev wifi
 
-topdu() {
+top_du() {
+  num=${1:-9}
   if ! shopt -q dotglob; then
     shopt -s dotglob
-    du -s * 2>/dev/null | sort -rn | head
+    du -s * 2>/dev/null | sort -rn | head -n$num
     shopt -u dotglob
   else
-    du -s * 2>/dev/null | sort -rn | head
+    du -s * 2>/dev/null | sort -rn | head -n$num
   fi
 }
 
