@@ -50,12 +50,8 @@ background_color = #000000 75
 # Background 6: Systray
 rounded = 2
 border_width = 1
-background_color = #222222 60
-border_color = #444444 100
-background_color_hover = #666666 60
-border_color_hover = #888888 100
-background_color_pressed = #aaaaaa 60
-border_color_pressed = #cccccc 100
+background_color = #000000 20
+border_color = #222222 80
 
 #-------------------------------------
 # Panel
