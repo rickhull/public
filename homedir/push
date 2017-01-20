@@ -1,58 +1,70 @@
 #!/bin/bash
 
-# never overwrite: just note which which files would be overwritten and some
-# details like which is newer
+# (selectively) copy a dir structure from a git repo to the host system
+# we copy files and dirs
+# if the destination dir doesn't exist, just cp -R the whole thing
+# if the destination dir exists, then look at the files within
+# if the destination file exists, only overwrite if mode == update
+# otherwise copy the file into place
 
-# TODO: add/update
-# add will never overwrite
-# update will overwrite
+dir=$1
+mode=$2
 
-checkdir() {
-  if [ -d $HOME/$1 ]; then
-    echo $HOME/$1 exists
-  else
-    echo "$HOME/$1 does not exist; creating..."
-    mkdir -p $HOME/$1
-  fi
-}
-
-checkfile() {
-  if [ -f $HOME/$1 ]; then
-    echo $HOME/$1 exists
-  else
-    echo "$HOME/$1 does not exist; copying..."
-    cp $1 $HOME/$1
-  fi
-}
-
-if [ -z "$1" ]; then
-   echo "please provide a dir"
-   exit 1
-else
-   dir=$1
-   if [ ! -d $dir ]; then
-      echo "cannot find $dir"
-      exit 1
-   fi
+if [[ -z "$dir" ]]; then
+  echo "please provide a dir"
+  exit 1
+elif [[ ! -d $dir ]]; then
+  echo "cannot find $dir"
+  exit 1
 fi
+if [[ -z "$mode" ]]; then mode=add; fi
 
-checkdir $dir
-
-for entry in $dir/*; do
-  if [ -d $entry ]; then
-    checkdir $entry
-    for file in $entry/*; do
-      if [ -f $file ]; then
-        checkfile $file
-      else
-        echo found $file but not a file
-      fi
-    done
-  else
-    if [ -f $entry ]; then
-      checkfile $entry
-    else
-      echo found $entry but not a file or dir
-    fi
+# copy files from source dir to destination within $HOME
+# only overwrite if $mode == update
+push_files() {
+  if [[ -z "$1" || ! -d $1 ]]; then
+    echo "bad input: $1"
+    return 1
   fi
-done
+
+  # selectively copy files
+  for file in $1/*; do
+    if [[ -f $file ]]; then
+      echo "considering $file"
+      if [[ -f $HOME/$file ]]; then
+        echo "file exists: $HOME/$file"
+        if [[ $mode == update ]]; then
+          echo "overwriting $HOME/$file because mode=update"
+          cp $file $HOME/$file
+        fi
+      else
+        echo "creating $HOME/$file"
+        cp $file $HOME/$file
+      fi
+    fi
+  done
+}
+
+if [[ ! -d $HOME/$dir ]]; then
+  # just copy everything
+  echo "creating $HOME/$dir"
+  cp -R $dir $HOME/$dir
+else
+  # selectively push files within $dir
+  echo "$HOME/$dir exists"
+  push_files $dir add
+
+  # push one level of subdirs within $dir
+  for entry in $dir/*; do
+    if [[ -d $entry ]]; then
+      if [[ -d $HOME/$entry ]]; then
+        # selectively push files within $entry
+        echo "$HOME/$entry exists"
+        push_files $entry add
+      else
+        echo "creating $HOME/entry"
+        cp -R $entry $HOME/$entry
+      fi
+    fi
+  done
+fi
