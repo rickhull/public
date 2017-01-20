@@ -15,11 +15,21 @@ findsed() {
   find ./ -type f -exec sed -i "$1" {} \;
 }
 
-# ruby - use chruby if available; setup PATH for user-install gems otherwise
-#
+alias lst='ls -ahlt | head'
+
+topdu() {
+  if ! shopt -q dotglob; then
+    shopt -s dotglob
+    du -s * 2>/dev/null | sort -rn | head
+    shopt -u dotglob
+  else
+    du -s * 2>/dev/null | sort -rn | head
+  fi
+}
+
+# chruby
 if [ -f /usr/local/share/chruby/chruby.sh ]; then
    source /usr/local/share/chruby/chruby.sh
-   source /usr/local/share/chruby/auto.sh
 else
    # provide for gem install --user-install
    #
@@ -32,4 +42,8 @@ fi
 #
 if [ -d $HOME/src/elixir/bin ]; then
    export PATH="$PATH:$HOME/src/elixir/bin"
+fi
+
+if [ -d $HOME/bin ]; then
+   export PATH="$PATH:$HOME/bin"
 fi
