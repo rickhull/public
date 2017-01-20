@@ -16,12 +16,12 @@ conky --daemonize --config ~/.config/conky/main.conf \
 
 # top processes
 conky --daemonize --config ~/.config/conky/top.conf \
-      --alignment bottom_left --interval 2 \
+      --alignment bottom_right --interval 2 \
       >> $log 2>&1
 
 # tail syslog
 conky --daemonize --config ~/.config/conky/syslog.conf \
-      --alignment bottom_right \
+      --alignment bottom_left \
       >> $log 2>&1
 
 # IO (network and disk)

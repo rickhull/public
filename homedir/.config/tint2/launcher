@@ -7,7 +7,7 @@
 # Background 1: Panel
 rounded = 0
 border_width = 0
-background_color = #000000 20
+background_color = #000000 40
 
 # Background 2: Tooltip
 rounded = 0
