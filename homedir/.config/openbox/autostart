@@ -1,5 +1,8 @@
 # turn bell off
 xset -b
+# DPMS - display power saving
+xset s off            # turn blanking off, DPMS is what we want
+xset dpms 100 200 300 # standby, suspend, off
 
 log=~/autostart.log
 
@@ -14,19 +17,14 @@ conky --daemonize --config ~/.config/conky/main.conf \
       --alignment top_left --interval 2 \
       >> $log 2>&1
 
-# top processes
-conky --daemonize --config ~/.config/conky/top.conf \
-      --alignment bottom_right --interval 2 \
-      >> $log 2>&1
-
-# tail syslog
+# journalctl
 conky --daemonize --config ~/.config/conky/syslog.conf \
       --alignment bottom_left \
       >> $log 2>&1
 
-# IO (network and disk)
-conky --daemonize --config ~/.config/conky/io.conf \
-      --alignment top_right --interval 2 \
+# journalctl errors
+conky --daemonize --config ~/.config/conky/error.conf \
+      --alignment bottom_right \
       >> $log 2>&1
 
 # app launcher
