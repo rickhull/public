@@ -1,0 +1,43 @@
+# emacs exports
+#
+export VISUAL=emacs
+export EDITOR=emacs
+
+#
+# aliases
+#
+
+alias lst='ls -ahlt | head'
+alias psc='ps xawf -eo pid,user,cgroup,args'
+
+#
+# functions
+#
+
+# global recursive search/replace -- CAREFUL!
+# e.g. findsed s/foo/bar/g
+findsed() {
+  find ./ -type f -exec sed -i "$1" {} \;
+}
+
+listening() {
+  sudo lsof -nP -i4TCP -sTCP:LISTEN | grep '*'
+}
+
+# recursive disk usage from current dir
+top_du() {
+  num=${1:-9}
+  if ! shopt -q dotglob; then
+    shopt -s dotglob
+    du -s * 2>/dev/null | sort -rn | head -n$num
+    shopt -u dotglob
+  else
+    du -s * 2>/dev/null | sort -rn | head -n$num
+  fi
+}
+
+# e.g. journalctl | awk '{print $5}' | top_count
+top_count() {
+  num=${1:-9}
+  sort | uniq -c | sort -rn | head -n$num
+}

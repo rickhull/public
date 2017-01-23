@@ -1,62 +1,24 @@
-# emacs
-#
-export VISUAL=emacs
-export EDITOR=emacs
+if [[ -f .bash_defs ]]; then
+  . .bash_defs
+else
+  echo "OOPS: can't find .bash_defs"
+fi
+
+# add $HOME/bin and one level of subdirs to PATH
+if [[ -d $HOME/bin ]]; then
+  export PATH="$PATH:$HOME/bin"
+  for entry in $HOME/bin/*; do
+    if [[ -d $entry ]]; then export PATH="$PATH:$entry"; fi
+  done
+fi
 
 # git branch in bash prompt
-#
-source /etc/bash_completion
-export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
-
-# handy for recursive global search / replace
-# findsed s/foo/bar/g
-#
-findsed() {
-  find ./ -type f -exec sed -i "$1" {} \;
-}
-
-alias lst='ls -ahlt | head'
-
-listening() {
-  sudo lsof -nP -i4TCP -sTCP:LISTEN | grep '*'
-}
-
-# reminder for wifi
-# nmcli dev wifi
-
-top_du() {
-  num=${1:-9}
-  if ! shopt -q dotglob; then
-    shopt -s dotglob
-    du -s * 2>/dev/null | sort -rn | head -n$num
-    shopt -u dotglob
-  else
-    du -s * 2>/dev/null | sort -rn | head -n$num
-  fi
-}
-
-top_count() {
-  num=${1:-9}
-  sort | uniq -c | sort -rn | head -n$num
-}
+if [[ -f /etc/bash_completion ]]; then
+  . /etc/bash_completion
+  export PS1='\[\033[1;35m\]\u@\H\[\033[0m\]:\[\033[1;35m\]\w\[\033[0m\]\[\033[1;92m\]$(__git_ps1 " (%s)")\[\033[0m\]\$ '
+fi
 
 # chruby
-if [ -f /usr/local/share/chruby/chruby.sh ]; then
-   source /usr/local/share/chruby/chruby.sh
-else
-   # provide for gem install --user-install
-   #
-   for GEM_BIN in $HOME/.gem/ruby/*/bin; do
-      export PATH="$PATH:$GEM_BIN"
-   done
-fi
-
-# elixir - use locally built binary if available
-#
-if [ -d $HOME/src/elixir/bin ]; then
-   export PATH="$PATH:$HOME/src/elixir/bin"
-fi
-
-if [ -d $HOME/bin ]; then
-   export PATH="$PATH:$HOME/bin"
+if [[ -f /usr/local/share/chruby/chruby.sh ]]; then
+  . /usr/local/share/chruby/chruby.sh
 fi
