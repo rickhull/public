@@ -18,7 +18,7 @@ background_color = #000000 75
 # Panel
 #
 panel_items = L
-panel_size = 350 40
+panel_size = 375 40
 panel_margin = 0 0
 panel_padding = 2 0 2
 panel_background_id = 1
@@ -29,7 +29,7 @@ panel_layer = top
 panel_monitor = all
 primary_monitor_first = 0
 autohide = 1
-autohide_show_timeout = 0.2
+autohide_show_timeout = 0.1
 autohide_hide_timeout = 1
 autohide_height = 2
 strut_policy = minimum
@@ -52,8 +52,8 @@ startup_notifications = 1
 launcher_tooltip = 1
 launcher_item_app = /usr/share/applications/lxterminal.desktop
 launcher_item_app = /usr/share/applications/chromium.desktop
-launcher_item_app = /usr/share/applications/synaptic.desktop
 launcher_item_app = /usr/share/applications/firefox-esr.desktop
+launcher_item_app = /usr/share/applications/hexchat.desktop
 launcher_item_app = /usr/share/applications/gimp.desktop
 launcher_item_app = /usr/share/applications/steam.desktop
 launcher_item_app = /usr/share/applications/wesnoth-1.12.desktop
