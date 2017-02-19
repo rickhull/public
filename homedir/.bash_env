@@ -1,8 +1,5 @@
-if [[ -f .bash_defs ]]; then
-  . .bash_defs
-else
-  echo "OOPS: can't find .bash_defs"
-fi
+# source .bash_defs
+if [[ -f $HOME/.bash_defs ]]; then . $HOME/.bash_defs; fi
 
 # add $HOME/bin and one level of subdirs to PATH
 if [[ -d $HOME/bin ]]; then
