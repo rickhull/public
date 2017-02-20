@@ -8,8 +8,6 @@ log=~/autostart.log
 
 # compositor
 compton --daemon --config ~/.config/compton/tooltip.conf \
-        --shadow --no-dock-shadow --no-dnd-shadow \
-        --fading --fade-delta 5 \
         > $log 2>&1
 
 # main status
