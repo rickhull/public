@@ -15,15 +15,35 @@ conky --daemonize --config ~/.config/conky/main.conf \
       --alignment top_left --interval 2 \
       >> $log 2>&1
 
-# journalctl
-conky --daemonize --config ~/.config/conky/syslog.conf \
-      --alignment bottom_left \
-      >> $log 2>&1
+# journalctl warnings
+urxvt -depth 32 \
+      -bg rgba:0000/0000/0000/8000 \
+      -fg rgba:e000/e000/e000/ffff \
+      -cr rgba:0000/0000/0000/8000 \
+      -fn "xft:DejaVu Sans Mono:size=8" \
+      -geometry 146x31 \
+      +sb \
+      -name LogTerm \
+      -letsp -1 \
+      -bl \
+      -e journalctl --priority=warning \
+                    --no-hostname --no-full\
+                    --follow --lines 30 \
+      >> $log 2>&1 &
 
-# journalctl errors
-conky --daemonize --config ~/.config/conky/error.conf \
-      --alignment bottom_right \
-      >> $log 2>&1
+# top
+urxvt -depth 32 \
+      -bg rgba:0000/0000/0000/8000 \
+      -fg rgba:e000/e000/e000/ffff \
+      -cr rgba:0000/0000/0000/8000 \
+      -fn "xft:DejaVu Sans Mono:size=8" \
+      -geometry 92x27 \
+      +sb \
+      -name TopTerm \
+      -letsp -1 \
+      -bl \
+      -e top \
+      >> $log 2>&1 &
 
 # app launcher
 tint2 -c ~/.config/tint2/launcher \
