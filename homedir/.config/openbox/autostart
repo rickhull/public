@@ -2,7 +2,7 @@
 xset -b
 # DPMS - display power saving
 xset s off            # turn blanking off, DPMS is what we want
-xset dpms 100 200 300 # standby, suspend, off
+xset dpms 200 200 200 # standby, suspend, off
 
 log=~/autostart.log
 
