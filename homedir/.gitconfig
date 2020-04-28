@@ -3,6 +3,7 @@
 	editor = emacs
 [user]
 	name = Rick Hull
+	email = rwh@localhost
 [color]
 	ui = auto
 	diff = auto
