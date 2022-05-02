@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # (selectively) copy a dir structure from a git repo to the host system
 # we copy files and dirs
