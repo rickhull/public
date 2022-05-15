@@ -32,7 +32,7 @@ out.  The box includes a 128 GB SSD, so here is the planned partition layout:
 3. 10 GB for arch
 4. 20 GB for NixOS
 5. 30 GB for files
-6. 60 GB for files
+6. 60 GB (whatever is left) for files
 
 ### Detailed Partitioning
 
@@ -46,4 +46,36 @@ out.  The box includes a 128 GB SSD, so here is the planned partition layout:
 * (/dev/sda3) 10 GB  [ext4]             "arch"
 * (/dev/sda4) 20 GB  [XFS -m reflink=1] "nixos"
 * (/dev/sda5) 30 GB  [ext4]             "files30"
-* (/dev/sda6) 60 GB  [ext4]             "files60"
+* (/dev/sda6) 100%   [ext4]             "files60"
+
+### Arch Stuff
+
+# Static Networking
+
+## Use `systemd-networkd` and `systemd-resolved`
+
+Be careful with
+https://wiki.archlinux.org/title/Installation_guide#Network_configuration
+recommending you visit
+https://wiki.archlinux.org/title/Network_configuration
+because you will get very confused if you are trying to use systemd for static
+networking.
+
+It's very simple, however:
+
+```
+cat << EOF >> /etc/systemd/network/20-wired.conf
+[Match]
+Name=enp1s0
+
+[Network]
+Address=192.168.0.10
+Gateway=192.168.0.1
+DNS=192.168.0.1
+EOF
+
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+systemctl start systemd-networkd
+systemctl start systemd-resolved
+```
