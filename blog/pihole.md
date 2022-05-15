@@ -14,7 +14,7 @@ some secondary objective (e.g. gaming / MAME / emulation) requires such.
 I considered many options, lusting after current AMD Ryzen APUs which can be
 stuffed into finely crafted fanless enclosures such as
 [these](https://www.cirrus7.com/en/produkte/cirrus7-incus/).  I am also leaning
-towards AMD because they have a much better relationship with Linux and the
+towards AMD because they have a good relationship with Linux and the
 open source community.  But I ended up settling for an older AMD A6 quad core
 chipset originally aimed at the netbook / airbook / laptop market, but adapted
 to a fanless, aluminum heat sink chassis, with modern peripherals like HDMI,
@@ -48,11 +48,9 @@ out.  The box includes a 128 GB SSD, so here is the planned partition layout:
 * (/dev/sda5) 30 GB  [ext4]             "files30"
 * (/dev/sda6) 100%   [ext4]             "files60"
 
-### Arch Stuff
+## Static Networking
 
-# Static Networking
-
-## Use `systemd-networkd` and `systemd-resolved`
+### Use `systemd-networkd` and `systemd-resolved`
 
 Be careful with
 https://wiki.archlinux.org/title/Installation_guide#Network_configuration
@@ -61,21 +59,28 @@ https://wiki.archlinux.org/title/Network_configuration
 because you will get very confused if you are trying to use systemd for static
 networking.
 
-It's very simple, however:
+It's very simple, however, based on `$GATEWAY_IP` and `$STATIC_IP`, and this
+assumes DNS comes from `$GATEWAY_IP`:
 
 ```
+# WIRED_NAME=enp2s0
+# STATIC_IP=192.168.1.10
+# GATEWAY_IP=192.168.1.1
+
 cat << EOF >> /etc/systemd/network/20-wired.conf
 [Match]
-Name=enp1s0
+Name=$WIRED_NAME
 
 [Network]
-Address=192.168.0.10
-Gateway=192.168.0.1
-DNS=192.168.0.1
+Address=$STATIC_IP
+Gateway=$GATEWAY_IP
+DNS=$GATEWAY_IP
 EOF
 
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl start systemd-networkd
 systemctl start systemd-resolved
+
+ping archlinux.org
 ```
