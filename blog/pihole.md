@@ -48,6 +48,32 @@ out.  The box includes a 128 GB SSD, so here is the planned partition layout:
 * (/dev/sda5) 30 GB  [ext4]             "files30"
 * (/dev/sda6) 100%   [ext4]             "files60"
 
+#### Steps
+
+I didn't take notes, unfortunately.  Per the Arch install guide, having booted
+via USB, I created the partitions with fdisk, like:
+
+```
+new +512M
+new +1G
+new +10G
+new +20G
+new +30G
+new 100%
+```
+
+It was important to me to label the partitions, and this happens generally
+at filesystem creation time.  Again, no detailed notes, but it was mostly a
+series of things like
+
+```
+mkfs.fat -B 32 -L efi ...
+mkswap ...
+mkfs.ext4 ...
+mkfs.xfs -m reflink=1 ...
+...
+```
+
 ## Static Networking
 
 ### Use `systemd-networkd` and `systemd-resolved`
