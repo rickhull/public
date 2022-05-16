@@ -110,3 +110,21 @@ systemctl start systemd-resolved
 
 ping archlinux.org
 ```
+
+Having gotten static networking going, I haven't done much with DHCP or even
+attempted WiFi.  I did install OpenSSH, but I haven't even attempted a login
+yet.  Eventually I would like to get PiHole and a basic dev shell via SSH
+going on Arch, but I paused here.
+
+## NixOS
+
+Having already created my partitions and filesystems, the NixOS install was
+a breeze.  I used balenaEtcher again with the latest NixOS install ISO to
+overwrite the Arch installer on my USB stick.  Plugged it in, booted into
+NixOS, mounted /dev/disk/by-label/nixos at /mnt, and ran
+`nixos-generate-config --root /mnt`.
+
+I then wandered around `/mnt/etc/nixos/configuration.nix` and made sure
+`boot.loader.systemd-boot.enable` was set.  Took a look at
+`hardware-configuration.nix` as well. Then `nixos-install`, wait for the
+system to build, and reboot successfully.
