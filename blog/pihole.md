@@ -304,3 +304,16 @@ query response (not including cached responses) was reduced to ~20 ms.
     allowedUDPPorts = [ 53 ];
   };
 ```
+
+Note, particularly: `schema_version = 12;`.  There is a "bug" of some sorts,
+either on the AGH side or the nixpgks side, where if the `schema_version` is
+not explicitly specified, then the schema is interpreted from version 0 and is
+progressively checked and upgraded up through schema version 12.  Well, if you
+present schema version 0 with schema version 12 config, then schema version 0
+will reject the newer config.  And this is what happens when you try to build
+a modern config without specifying the `schema_version`.
+
+I reported these findings:
+
+* [AdGuardHome issue 4067](https://github.com/AdguardTeam/AdGuardHome/issues/4067#issuecomment-1133781835)
+* [NixOS/nixpkgs issue 173938](https://github.com/NixOS/nixpkgs/issues/173938)
