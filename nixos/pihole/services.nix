@@ -34,7 +34,7 @@
           # "https://dns10.quad9.net/dns-query"
 
           # fast, insecure
-          "192.168.1.1" # google fiber gateway
+          "192.168.1.1" # gateway
           "8.8.8.8"     # google
           "8.8.8.4"     # google
         ];
