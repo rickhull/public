@@ -128,3 +128,179 @@ I then wandered around `/mnt/etc/nixos/configuration.nix` and made sure
 `boot.loader.systemd-boot.enable` was set.  Took a look at
 `hardware-configuration.nix` as well. Then `nixos-install`, wait for the
 system to build, and reboot successfully.
+
+### DNS Blacklist
+
+I looked into running pihole specifically, but it does not appear Nix-friendly.
+I read a post that suggested dnsmasq could easily do DNS blacklisting, so
+I played with that for a little while.  Here is the config I tried:
+
+```
+  # dnsmasq for pihole-like experience
+  #services.dnsmasq = {
+  #  enable = true;
+  #  servers = [
+  #    "8.8.8.8"
+  #    "8.8.4.4"
+  #  ];
+  #  extraConfig = ''
+  #    domain-needed
+  #    bogus-priv
+  #    no-resolv
+  #
+  #    listen-address=::1,127.0.0.1,192.168.1.10
+  #    bind-interfaces
+  #
+  #    cache-size=10000
+  #    local-ttl=300
+  #
+  #    log-queries
+  #    log-facility=/tmp/dnsmasq.log
+  #
+  #    conf-file=/etc/nixos/assets/dnsmasq.blacklist.txt
+  #  '';
+  #};
+```
+
+Now, where does `dnsmasq.blacklist.txt` come from?
+
+```
+wget https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt -O /etc/nixos/assets/dnsmasq.blacklist.txt
+```
+
+Maybe you throw that into `cron.daily`?  I found that this wasn't working very
+well for me, and I could not find any sort of logging.  I could not confirm
+that the blacklist was working, and a lot of ads were still being displayed
+in various browsers.
+
+#### AdGuardHome
+
+Next, I ran across AdGuardHome, particularly finding it to be a supported
+nixpkg.  I got it running pretty easily, and the early, basic setup is in the
+history of a local git repo.  I did run into some headaches though, mostly due
+to my wireless access point / gateway / router.
+
+Ideally, any device on the network will automatically be configured to use the
+local DNS resolver (i.e. pihole / blacklisting) instead of, say, the gateway
+itself or any upstream (ISP) DNS servers.  There are a couple ways to do this,
+mostly revolving around configuration on the gateway itself, either where the
+gateway itself only knows about the local DNS resolver and ignores upstream
+resolvers, or where the gateway's DHCP server tells local devices only about
+the local DNS resolver.
+
+My particular gateway device is not capable of either operation, nor can its
+DHCP server be disabled.  One option I just now considered at this very moment
+is to restrict the DHCP address pool on the gateway to a single address.  But
+this is a kludge and will result in one device on average not using the pihole.
+If I could disable the gateyway's DHCP server, then I could just let the pihole
+run DHCP and advertise itself as the DNS server.
+
+As such, as long as I'm running this particular gateway device, I have to
+configure each device's DNS server individually.  And I was shocked to find
+that my Android phone's network config widget does allow static IP
+configuration or any DNS configuration.  Go figure v0v.  Most other devices
+I care about were able to be configured individually.
+
+##### Features
+
+* DNS blackhole
+* Malware / Phishing blocklist
+* DHCP
+* Various logging and encryption options
+* Encrypted DNS (DoH, DoT)
+
+##### Upstream DNS
+
+For upstream DNS, I ended up pointing to the gateway and then google's public
+DNS servers.  I was finding some high latency, so I haven't enabled any sort
+of upstream encrypted DNS, yet.  Speaking of latency, I was getting response
+times on the order of 200 ms, whereas dnsmasq was responding under 5-10 ms.
+
+When querying upstream directly, responses came back around 10-20 ms (IIRC).
+So, something in AdGuardHome was slowing down the DNS queries that were not
+already cached and required upstream queries.  I ultimately determined it to
+be reverse DNS lookups, where AdGuardHome sees a local IP address and sends
+an rDNS query to the gateway to get a hostname (for friendlier log entries,
+at minimum).  These rDNS queries were timing out, as it turns out my gateway
+does not support rDNS either.  Once I disabled the rDNS attempts, average
+query response (not including cached responses) was reduced to ~20 ms.
+
+##### Configuration
+
+```
+  # AdGuardHome for pihole-like experience
+  services.adguardhome = {
+    enable = true;
+
+    # just the http(s) admin interface
+    port = 3000;
+    openFirewall = true;
+
+    # corresponds to /var/lib/AdGuardHome/AdGuardHome.yaml
+    settings = {
+      schema_version = 12;
+      dns = {
+        bind_hosts = ["0.0.0.0"];
+
+        # query logging
+        querylog_enabled = true;
+        querylog_file_enabled = true;
+        querylog_interval = "24h";
+        querylog_size_memory = 1000;   # entries
+        anonymize_client_ip = false;   # for now
+
+        # adguard
+        protection_enabled = true;
+        blocking_mode = "default";     # NXDOMAIN
+        filtering_enabled = true;
+
+        # upstream DNS
+        upstream_dns = [
+          # slow, secure
+          # "https://cloudflare-dns.com/dns-query"
+          # "https://dns10.quad9.net/dns-query"
+
+          # fast, insecure
+          "192.168.1.1" # google fiber gateway
+          "8.8.8.8"     # google
+          "8.8.8.4"     # google
+        ];
+        # if upstream has any hostnames
+        bootstrap_dns = ["192.168.1.1"];  # ask the gateway
+
+        # caching
+        cache_size = 536870912;  # 512 MB
+        cache_ttl_min = 1800;    # 30 min
+        cache_optimistic = true; # return stale and then refresh
+
+        # rDNS (get hostname for local ips)
+        # disable for now; isn't working and creates latency
+        use_private_ptr_resolvers = false;
+        resolve_clients = false;
+      };
+
+      # note: DHCP is disabled, because gateway's DCHP cannot be diabled
+      # But DHCP can be usefully enabled on a distinct address segment from the
+      # gateway's DHCP pool.  However, if the gateway responds first, there
+      # will always be at least one device getting DHCP from the gateway
+      dhcp = {
+        enabled = false;
+        interface_name = "enp2s0";
+        dhcpv4 = {
+          gateway_ip = "192.168.1.1";
+          subnet_mask = "255.255.255.0";
+          range_start = "192.168.1.100";
+          range_end = "192.168.1.200";
+          lease_duration = 0;
+        };
+        local_domain_name = "local";
+      };
+    };
+  };
+
+  # AdGuardHome's DNS service ports
+  networking.firewall = {
+    allowedTCPPorts = [ 53 ];
+    allowedUDPPorts = [ 53 ];
+  };
+```
