@@ -1,0 +1,79 @@
+* AMD A6 1450 Quad core
+* Fanless
+* 8G DDR3L
+* 128G SSD
+* Dual Display/Dual-Band WiFi/BT/Type-C/6x USB
+* Auto Power On/WOL/PXE Boot
+
+The definitive guide to the hardware, per `lshw`:
+
+Motherboard: AMD Kabini CRB (notebook)
+*  CPU: AMD A6-1450 APU
+*  RAM: 1x SODIMM Single channel DDR3L-1066
+*  GFX: Radeon HD 8250 / 300-400 MHz / 128 shaders / GCN architecture
+*  TDP: 5-8-11W (15W Turbo Dock) / 100-240V in / 12V 3A out
+* DISP: HDMI / VGA
+*  USB: 4x USB 2 / 2x USB 3
+*  NET: 1 GbE / WiFi / 2.4G / 5G / B/G/N / mini PCIe
+*   BT: Bluetooth 4.0 / 12 Mb / USB
+* DISK: 128 GB mSATA
+*  AUD: Realtek ALC 662 / Azalia / snd_hda_intel / earphones / mic
+*  EFI: AMI 4.6.5
+
+CPU:
+* Quad core / 600 MHz - 1 GHz / 1.4 GHz Turbo
+* Jaguar architecture / SSE 4.2 / AES / AVX
+* L1 256 KB / L2 2 MB
+
+RAM: 1 slot SODIMM DDR 3 single channel 1066 MHz
+* 8 GB Micron 1600 / Synchronous Unbuffered / 1.5 V
+
+PCI:
+0:
+ - Display / radeon
+ - HD Audio / Realtek ALC 662 / snd_hda_intel
+ -> Wifi / rt18821ae
+1:
+ -> GbE / r8169
+
+
+USB speeds:
+USB1:  12 Mb/s
+USB2: 480 Mb/s
+USB3:   5 Gb/s
+
+USB:		(bit/MHz)
+0: xHCI		(64/33)
+- usb:0.2 USB2
+- usb:0.3 USB3
+1: OHCI		(32/66)
+- usb:1 USB1
+2: EHCI		(32/66)
+- usb:2 USB2
+3: OHCI		(32/66)
+- usb:3 USB1 => BT 4.0 / Realtek / 500mA
+4: EHCI		(32/66)
+- usb:4 USB2
+
+USB-by-capability:
+* USB3
+  - usb:0.3
+* USB2
+  - usb:0.2
+  - usb:2
+  - usb:4
+* USB1
+  - usb:1
+  - usb:3
+
+usb:2 and usb:4 are identical from a Linux perspective
+
+Front panel
+-----------
+		BLK (usb:2)	BLU (usb:4)
+USBC (usb:0)	BLK (usb:2)	BLU (usb:4)
+
+Back panel
+----------
+BLK (usb:2)
+BLK (usb:2)
